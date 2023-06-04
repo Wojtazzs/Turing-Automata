@@ -133,7 +133,7 @@ class Turing_Machine():
     
 
     # Read the value from the current cell
-    def __read_value(self) -> str | bool:
+    def __read_value(self):
         # If the move is invalid return False
         try:
             return self.curr_tape.tape[self.curr_tape.pos]
@@ -161,7 +161,7 @@ def tape_input(input_alfabet: set, zad: str):
 
 
 # Save the turring machine to a json file
-def save_turring_to_file(turring: Turing_Machine, filename: str) -> None:
+def save_turring_to_file(turing: Turing_Machine, filename: str) -> None:
     states = {}
     alfabet = {}
     move = {}
@@ -170,15 +170,15 @@ def save_turring_to_file(turring: Turing_Machine, filename: str) -> None:
     reject = {}
     tape = {}
     tape['tape'] = ''
-    for i in turring.curr_tape.tape:
+    for i in turing.curr_tape.tape:
         tape['tape'] += i
-    states['states'] = list(turring.states)
-    alfabet['alfabet'] = list(turring.alfabet)
-    move['moves'] = list(turring.moves.items())
-    start = turring.current_state
-    accepts['accept'] = list(turring.accept)
-    input_alfabet['input_alfabet'] = list(turring.input_alfabet)
-    reject['reject'] = list(turring.reject)
+    states['states'] = list(turing.states)
+    alfabet['alfabet'] = list(turing.alfabet)
+    move['moves'] = list(turing.moves.items())
+    start = turing.current_state
+    accepts['accept'] = list(turing.accept)
+    input_alfabet['input_alfabet'] = list(turing.input_alfabet)
+    reject['reject'] = list(turing.reject)
     turring_array = [states, alfabet, start, accepts, input_alfabet, reject, move, tape]
     
     with open(filename, 'w') as file:
@@ -216,5 +216,51 @@ def load_turring_from_file(filename: str) -> Turing_Machine:
         )
 
 
+def zad1(print_status = False):
+    states = {'q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'qa', 'qr'}
+    alfabet = {'a', '.a', '/a', False}
+    input_alfabet = {'a'}
+    start = 'q0'
+    accept = {'qa'}
+    reject = {'qr'}
+    moves = {
+    #   From   Read     Write    Move      To
+    #   State, value,   new_val, move_dir, new_state
+        ('q0', 'a'):    ('.a',   'right',  'q1'),
+        ('q0', False):  (False,  'left',   'qr'),
+        ('q1', '/a'):   (False,  'right',  'q1'),
+        ('q1', 'a'):    (False,  'left',   'q2'),
+        ('q1', False):  (False,  'left',   'qa'),
+        ('q2', '/a'):   (False,  'left',   'q2'),
+        ('q2', '.a'):   (False,  'left',   'q3'),
+        ('q3', '/a'):   (False,  'right',  'q3'),
+        ('q3', 'a'):    (False,  'right',  'q4'),
+        ('q3', '.a'):   (False,  'right',  'q4'),
+        ('q3', False):  (False,  'left',   'q6'),
+        ('q4', '/a'):   (False,  'right',  'q4'),
+        ('q4', 'a'):    ('/a',   'right',  'q5'),
+        ('q4', False):  (False,  'left',   'qr'),
+        ('q5', '/a'):   (False,  'right',  'q5'),
+        ('q5', 'a'):    ('/a',   'right',  'q3'),
+        ('q5', False):  (False,  'left',   'qr'),
+        ('q6', '/a'):   (False,  'left',   'q6'),
+        ('q6', 'a'):    (False,  'left',   'q6'),
+        ('q6', '.a'):   (False,  'right',  'q1')
+    }
+    
+    zad1_tape = tape_input(input_alfabet, '1')
+
+    zad1_turing = Turing_Machine(
+    tape=zad1_tape, moves=moves, states=states, alfabet=alfabet, input_alfabet=input_alfabet,
+    start=start, accept=accept, reject=reject, 
+    )
+
+    print(zad1_turing.solve(print_status=print_status))
+
+
 if __name__ == "__main__":
     print('Turing Machine class file')
+    zad1(print_status=True)
+    turing = load_turring_from_file('turing.json')
+    turing.solve(print_status=True)
+    save_turring_to_file(turing, "zad1_out")
