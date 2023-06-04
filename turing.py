@@ -1,7 +1,7 @@
 from json import load, dump
 
 """
-    Example of a turring machine:
+    Example of a turing machine:
 
     states = {'q0', 'q1', 'q2', 'q3', 'q4', 'q5', 'q6', 'qa', 'qr'}
     alfabet = {'a', '.a', '/a', False}
@@ -160,8 +160,8 @@ def tape_input(input_alfabet: set, zad: str):
     return Tape(tape)
 
 
-# Save the turring machine to a json file
-def save_turring_to_file(turing: Turing_Machine, filename: str) -> None:
+# Save the turing machine to a json file
+def save_turing_to_file(turing: Turing_Machine, filename: str) -> None:
     states = {}
     alfabet = {}
     move = {}
@@ -179,25 +179,25 @@ def save_turring_to_file(turing: Turing_Machine, filename: str) -> None:
     accepts['accept'] = list(turing.accept)
     input_alfabet['input_alfabet'] = list(turing.input_alfabet)
     reject['reject'] = list(turing.reject)
-    turring_array = [states, alfabet, start, accepts, input_alfabet, reject, move, tape]
+    turing_array = [states, alfabet, start, accepts, input_alfabet, reject, move, tape]
     
     with open(filename, 'w') as file:
-        dump(turring_array, file)
+        dump(turing_array, file)
 
 
-# Create a turring machine from a json file
-def load_turring_from_file(filename: str) -> Turing_Machine:
+# Create a turing machine from a json file
+def load_turing_from_file(filename: str) -> Turing_Machine:
     with open(filename, 'r') as file:
-        turring_array = load(file)
+        turing_array = load(file)
 
-    file_states = set(turring_array[0]['states'])
-    file_alfabet = set(turring_array[1]['alfabet'])
-    file_start = turring_array[2]
-    file_accept = set(turring_array[3]['accept'])
-    file_input_alfabet = set(turring_array[4]['input_alfabet'])
-    file_reject = set(turring_array[5]['reject'])
-    file_moves = turring_array[6]['moves']
-    file_tape = turring_array[7]['tape']
+    file_states = set(turing_array[0]['states'])
+    file_alfabet = set(turing_array[1]['alfabet'])
+    file_start = turing_array[2]
+    file_accept = set(turing_array[3]['accept'])
+    file_input_alfabet = set(turing_array[4]['input_alfabet'])
+    file_reject = set(turing_array[5]['reject'])
+    file_moves = turing_array[6]['moves']
+    file_tape = turing_array[7]['tape']
 
     file_move = {}
     for i in file_moves:
@@ -261,6 +261,6 @@ def zad1(print_status = False):
 if __name__ == "__main__":
     print('Turing Machine class file')
     zad1(print_status=True)
-    turing = load_turring_from_file('turing.json')
+    turing = load_turing_from_file('turing.json')
     turing.solve(print_status=True)
-    save_turring_to_file(turing, "zad1_out")
+    save_turing_to_file(turing, "zad1_out")
